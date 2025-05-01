@@ -1,7 +1,8 @@
 require("dotenv").config();
 const axios = require("axios");
 const mysql = require("mysql2/promise");
-const cheerio = require("cheerio");
+const cheerio = require("cheerio")
+U
 
 console.log('Connecting with:', {
   host: process.env.DB_HOST,

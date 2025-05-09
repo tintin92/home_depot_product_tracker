@@ -2,7 +2,6 @@ require("dotenv").config();
 const axios = require("axios");
 const mysql = require("mysql2/promise");
 const cheerio = require("cheerio")
-U
 
 console.log('Connecting with:', {
   host: process.env.DB_HOST,
@@ -29,15 +28,16 @@ const getConnection = async () => {
     password: process.env.DB_PASSWORD,
     database:process.env.DB_NAME,
   });
-};
-// 
-// const price = $("span.sui-font-display").text().trim();
+};   
+
 // Schedule the next scrape
 const scheduleNextScrape = () => {
   const now = new Date();
   const tomorrow = new Date(now);
   tomorrow.setDate(now.getDate() + 1);
-  tomorrow.setHours(Math.floor(Math.random() * 24));
+  const minHour = 6; // Minimum hour for scheduling
+  const maxHour = 23; // Maximum hour for scheduling
+  tomorrow.setHours(Math.floor(Math.random() * (maxHour - minHour + 1)) + minHour);
   tomorrow.setMinutes(Math.floor(Math.random() * 60));
   tomorrow.setSeconds(0);
   tomorrow.setMilliseconds(0);
@@ -53,7 +53,6 @@ const scrapePrice = async () => {
   try {
     const response = await axios.get(url, { headers: HEADERS });
     const $ = cheerio.load(response.data);
-
     const title = $("h1.sui-h4-bold").text().trim();
     const price = $("span.sui-font-display").text().trim();   
     const timestamp = new Date();
@@ -68,10 +67,9 @@ const scrapePrice = async () => {
     console.log(`✔ Saved ${title} @ ${price} on ${timestamp.toISOString()}`);
   } catch (err) {
     console.error('❌ Error:', err.message);
-  }
-
-  scheduleNextScrape();
-};
-
+  } finally {
+    // Schedule the next scrape
+    scheduleNextScrape();
+}
 // Start
 scrapePrice();

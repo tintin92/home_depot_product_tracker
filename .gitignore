@@ -1,0 +1,10 @@
+node_modules/
+*.log
+*.env
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+# macOS
+.DS_Store

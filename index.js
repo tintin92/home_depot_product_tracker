@@ -71,5 +71,6 @@ const scrapePrice = async () => {
     // Schedule the next scrape
     scheduleNextScrape();
 }
+};
 // Start
 scrapePrice();
